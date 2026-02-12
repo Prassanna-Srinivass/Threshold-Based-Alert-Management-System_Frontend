@@ -19,7 +19,14 @@ const Register = () => {
     setLoading(true);
 
     try {
-      const { data } = await registerUser({ username, email, password, role });
+      // Send both name and username to be compatible with backend validator
+      const { data } = await registerUser({ 
+        name: username,
+        username, 
+        email, 
+        password, 
+        role 
+      });
       login(data);
       if (data.role === 'ADMIN') {
         navigate('/admin');
@@ -27,7 +34,14 @@ const Register = () => {
         navigate('/operator');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      console.error('Registration error:', err.response?.data);
+      // Handle express-validator errors
+      if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+        const errorMessages = err.response.data.errors.map(e => e.msg).join(', ');
+        setError(errorMessages);
+      } else {
+        setError(err.response?.data?.message || 'Registration failed');
+      }
     } finally {
       setLoading(false);
     }

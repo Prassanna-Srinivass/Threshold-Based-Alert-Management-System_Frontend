@@ -18,7 +18,12 @@ const Login = () => {
 
     try {
       console.log('Sending login request with:', { username, password: '***' });
-      const { data } = await loginUser({ username, password });
+      // Send both username and email (use username for email) to be compatible with backend
+      const { data } = await loginUser({ 
+        username, 
+        email: username, 
+        password 
+      });
       console.log('Login successful:', data);
       login(data);
       if (data.role === 'ADMIN') {
