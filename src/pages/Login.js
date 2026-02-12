@@ -17,7 +17,9 @@ const Login = () => {
     setLoading(true);
 
     try {
+      console.log('Sending login request with:', { username, password: '***' });
       const { data } = await loginUser({ username, password });
+      console.log('Login successful:', data);
       login(data);
       if (data.role === 'ADMIN') {
         navigate('/admin');
@@ -25,7 +27,15 @@ const Login = () => {
         navigate('/operator');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      console.error('Login error:', err.response?.data);
+      
+      // Handle express-validator errors
+      if (err.response?.data?.errors && Array.isArray(err.response.data.errors)) {
+        const errorMessages = err.response.data.errors.map(e => e.msg).join(', ');
+        setError(errorMessages);
+      } else {
+        setError(err.response?.data?.message || 'Login failed');
+      }
     } finally {
       setLoading(false);
     }

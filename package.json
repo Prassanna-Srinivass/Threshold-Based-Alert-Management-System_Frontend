@@ -21,7 +21,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "https://threshold-based-alert-management-system.onrender.com",
   "eslintConfig": {
     "extends": [
       "react-app"
