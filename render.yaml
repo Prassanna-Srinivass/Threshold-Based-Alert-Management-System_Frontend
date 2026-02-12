@@ -1,25 +1,14 @@
 services:
   - type: web
     name: threshold-alert-frontend
-    runtime: static
+    runtime: node
+    plan: free
     buildCommand: npm install && npm run build
-    staticPublishPath: ./build
-    headers:
-      - path: /*
-        name: X-Frame-Options
-        value: SAMEORIGIN
-      - path: /*
-        name: X-Content-Type-Options
-        value: nosniff
-      - path: /*
-        name: Access-Control-Allow-Origin
-        value: "*"
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    startCommand: npm run serve
     envVars:
       - key: NODE_VERSION
         value: 18.20.8
       - key: REACT_APP_API_URL
         value: https://threshold-based-alert-management-system.onrender.com/api
+      - key: PORT
+        value: 10000
